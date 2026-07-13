@@ -1,4 +1,4 @@
-const MOVE_INTERVAL_SECONDS = 0.22;
+const MOVE_INTERVAL_SECONDS = 0.24;
 const POWER_DURATION_SECONDS = 7;
 const DIRECTION_OFFSETS = {
   up: { column: 0, row: -1 },
