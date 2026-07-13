@@ -1,4 +1,4 @@
-const CACHE_NAME = "acab-man-v10";
+const CACHE_NAME = "acab-man-v11";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,7 +11,7 @@ const APP_SHELL = [
   "./PIGLETS.png",
   "./COCKTAIL.png",
   "./SQUARE.png",
-  "./src/main.js?v=10",
+  "./src/main.js?v=11",
   "./src/game/Background.js",
   "./src/game/Enemy.js",
   "./src/game/Game.js",
@@ -42,18 +42,32 @@ self.addEventListener("fetch", (event) => {
   const requestUrl = new URL(event.request.url);
   if (requestUrl.origin !== self.location.origin) return;
 
+  // Always refresh document navigations first. The game code itself remains
+  // offline-capable, but a plain browser refresh can now receive new releases.
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetchAndCache(event.request).catch(() =>
+        caches.match(event.request).then((cachedResponse) => cachedResponse ?? caches.match("./index.html")),
+      ),
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then(
       (cachedResponse) =>
         cachedResponse ??
-        fetch(event.request)
-          .then((networkResponse) => {
-            if (!networkResponse || networkResponse.status !== 200) return networkResponse;
-            const responseCopy = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseCopy));
-            return networkResponse;
-          })
+        fetchAndCache(event.request)
           .catch(() => caches.match("./index.html")),
     ),
   );
 });
+
+function fetchAndCache(request) {
+  return fetch(request).then((networkResponse) => {
+    if (!networkResponse || networkResponse.status !== 200) return networkResponse;
+    return caches.open(CACHE_NAME).then((cache) => {
+      return cache.put(request, networkResponse.clone()).then(() => networkResponse);
+    });
+  });
+}
