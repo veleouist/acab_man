@@ -60,17 +60,20 @@ body {
 
 .intro-screen.is-fading-out img,
 .intro-screen.is-fading-out p,
-.title-screen.is-fading-out > * {
+.title-screen.is-fading-out img,
+.title-screen.is-fading-out strong {
   animation: overlay-content-fade-out 0.35s ease-in forwards;
 }
 
 .title-screen {
-  background: #ffffff;
+  background: #0b1020;
   color: #171717;
   cursor: pointer;
   display: grid;
   grid-template-rows: auto 1fr auto;
   inset: 0;
+  isolation: isolate;
+  overflow: hidden;
   padding: max(2rem, env(safe-area-inset-top)) 1.5rem max(2rem, env(safe-area-inset-bottom));
   place-items: center;
   position: fixed;
@@ -79,13 +82,34 @@ body {
   z-index: 9;
 }
 
+.title-screen video,
+.title-screen::before {
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.title-screen video {
+  object-fit: cover;
+  z-index: 0;
+}
+
+.title-screen::before {
+  background: rgba(8, 15, 28, 0.3);
+  content: "";
+  z-index: 1;
+}
+
 .title-screen img {
   align-self: start;
   margin-top: clamp(1.5rem, 8dvh, 5rem);
   max-height: 20dvh;
   max-width: min(100%, 44rem);
   object-fit: contain;
+  position: relative;
   width: 100%;
+  z-index: 2;
 }
 
 .title-screen strong {
@@ -93,7 +117,9 @@ body {
   color: #e52f2c;
   font-size: 1rem;
   letter-spacing: 0.08em;
+  position: relative;
   text-transform: uppercase;
+  z-index: 2;
 }
 
 .title-screen:focus-visible {
