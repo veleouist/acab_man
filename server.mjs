@@ -38,5 +38,5 @@ const server = createServer(async (request, response) => {
 });
 
 server.listen(PORT, "127.0.0.1", () => {
-  console.log(`Square Chase preview: http://127.0.0.1:${PORT}`);
+  console.log(`ACAB-MAN preview: http://127.0.0.1:${PORT}`);
 });
