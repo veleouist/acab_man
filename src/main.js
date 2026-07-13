@@ -10,6 +10,7 @@ import { SoundController } from "./game/SoundController.js";
 const canvas = document.querySelector("#game-canvas");
 const statusElement = document.querySelector("#status");
 const introScreen = document.querySelector("#intro-screen");
+const titleScreen = document.querySelector("#title-screen");
 const restartButton = document.querySelector("#restart-button");
 const pauseButton = document.querySelector("#pause-button");
 const soundButton = document.querySelector("#sound-button");
@@ -58,9 +59,13 @@ window.addEventListener("pointerdown", () => sound.unlock());
 window.addEventListener("keydown", () => sound.unlock());
 
 introScreen.addEventListener("pointerdown", () => {
-  void startGame();
+  void dismissIntro();
 }, { once: true });
 introScreen.addEventListener("keydown", handleIntroKey);
+titleScreen.addEventListener("pointerdown", () => {
+  void startGame();
+}, { once: true });
+titleScreen.addEventListener("keydown", handleTitleKey);
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
@@ -70,11 +75,12 @@ if ("serviceWorker" in navigator) {
   });
 }
 
+let introDismissed = false;
 let hasStarted = false;
 
-async function startGame() {
-  if (hasStarted) return;
-  hasStarted = true;
+async function dismissIntro() {
+  if (introDismissed) return;
+  introDismissed = true;
   introScreen.removeEventListener("keydown", handleIntroKey);
   await sound.unlock();
   sound.playIntro();
@@ -82,11 +88,31 @@ async function startGame() {
 
   window.setTimeout(() => {
     introScreen.hidden = true;
-    game.start();
+    titleScreen.hidden = false;
+    titleScreen.focus();
   }, 450);
 }
 
+async function startGame() {
+  if (hasStarted) return;
+  hasStarted = true;
+  titleScreen.removeEventListener("keydown", handleTitleKey);
+  await sound.unlock();
+  titleScreen.classList.add("is-fading-out");
+
+  window.setTimeout(() => {
+    titleScreen.hidden = true;
+    game.start();
+  }, 350);
+}
+
 function handleIntroKey(event) {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  event.preventDefault();
+  void dismissIntro();
+}
+
+function handleTitleKey(event) {
   if (event.key !== "Enter" && event.key !== " ") return;
   event.preventDefault();
   void startGame();

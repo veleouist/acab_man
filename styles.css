@@ -59,6 +59,61 @@ body {
   pointer-events: none;
 }
 
+.title-screen {
+  animation: title-fade-in 0.45s ease-out forwards;
+  background: #ffffff;
+  color: #171717;
+  cursor: pointer;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  inset: 0;
+  padding: max(2rem, env(safe-area-inset-top)) 1.5rem max(2rem, env(safe-area-inset-bottom));
+  place-items: center;
+  position: fixed;
+  text-align: center;
+  touch-action: manipulation;
+  z-index: 9;
+}
+
+.title-screen img {
+  align-self: start;
+  margin-top: clamp(1.5rem, 8dvh, 5rem);
+  max-height: 20dvh;
+  max-width: min(100%, 44rem);
+  object-fit: contain;
+  width: 100%;
+}
+
+.title-screen p {
+  align-self: end;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.title-screen strong {
+  animation: intro-pulse 1.15s ease-in-out infinite alternate;
+  color: #e52f2c;
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title-screen:focus-visible {
+  outline: 3px solid #e52f2c;
+  outline-offset: -6px;
+}
+
+.title-screen.is-fading-out {
+  animation: intro-fade-out 0.35s ease-in forwards;
+  pointer-events: none;
+}
+
+.intro-screen[hidden],
+.title-screen[hidden] {
+  display: none;
+}
+
 .game-shell {
   display: grid;
   gap: 0.75rem;
@@ -115,4 +170,13 @@ body {
 
 @keyframes intro-fade-out {
   to { opacity: 0; }
+}
+
+@keyframes title-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes intro-pulse {
+  to { opacity: 0.42; }
 }
