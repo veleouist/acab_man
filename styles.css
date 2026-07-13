@@ -294,9 +294,15 @@ body {
 
 .status {
   color: #dbeafe;
+  height: 1.25rem;
+  line-height: 1.25rem;
+  max-width: 100%;
   font-size: 0.875rem;
   margin: 0;
+  overflow: hidden;
   text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .restart-button,

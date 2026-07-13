@@ -1,8 +1,8 @@
-const CACHE_NAME = "acab-man-v26";
+const CACHE_NAME = "acab-man-v27";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=25",
+  "./styles.css?v=27",
   "./manifest.webmanifest",
   "./APP_ICON.png",
   "./assets/images/logo.png",
