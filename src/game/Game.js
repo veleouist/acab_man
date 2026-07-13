@@ -36,6 +36,7 @@ export class Game {
     this.resize = this.resize.bind(this);
     this.handleResize = () => this.resize();
     this.handleOrientationChange = () => this.resize(true);
+    this.handleFullscreenChange = () => this.resize(true);
     this.frame = this.frame.bind(this);
 
     this.preparePowerPickups();
@@ -48,6 +49,7 @@ export class Game {
   start() {
     window.addEventListener("resize", this.handleResize);
     window.addEventListener("orientationchange", this.handleOrientationChange);
+    document.addEventListener("fullscreenchange", this.handleFullscreenChange);
     this.resize(true);
     this.isRunning = true;
     this.input.setActive(true);
@@ -118,7 +120,7 @@ export class Game {
     this.viewportWidth = viewportWidth;
     this.viewportHeight = window.innerHeight;
     const maximumWidth = Math.min(viewportWidth - 16, 480);
-    const maximumHeight = Math.min(this.viewportHeight * 0.8, 720);
+    const maximumHeight = Math.min(this.viewportHeight * 0.9, 820);
     const width = Math.floor(Math.min(maximumWidth, maximumHeight * PLAYFIELD_ASPECT_RATIO));
     const height = Math.floor(width / PLAYFIELD_ASPECT_RATIO);
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);

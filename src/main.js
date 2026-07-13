@@ -1,4 +1,4 @@
-import { Game } from "./game/Game.js?v=20";
+import { Game } from "./game/Game.js?v=21";
 import { Background } from "./game/Background.js";
 import { Enemy } from "./game/Enemy.js";
 import { InputController } from "./game/InputController.js?v=18";
@@ -12,6 +12,8 @@ const canvas = document.querySelector("#game-canvas");
 const statusElement = document.querySelector("#status");
 const introScreen = document.querySelector("#intro-screen");
 const titleScreen = document.querySelector("#title-screen");
+const optionsToggle = document.querySelector("#options-toggle");
+const optionsPanel = document.querySelector("#options-panel");
 const restartButton = document.querySelector("#restart-button");
 const pauseButton = document.querySelector("#pause-button");
 const soundButton = document.querySelector("#sound-button");
@@ -63,6 +65,7 @@ hapticsButton.addEventListener("click", () => {
   const isEnabled = haptics.toggle();
   hapticsButton.textContent = isEnabled ? "Vibe: on" : "Vibe: off";
 });
+optionsToggle.addEventListener("click", () => setOptionsOpen(optionsPanel.hidden));
 window.addEventListener("pointerdown", () => sound.unlock());
 window.addEventListener("keydown", () => sound.unlock());
 
@@ -105,6 +108,7 @@ async function dismissIntro() {
 async function startGame() {
   if (hasStarted) return;
   hasStarted = true;
+  requestGameFullscreen();
   titleScreen.removeEventListener("keydown", handleTitleKey);
   void sound.unlock();
   sound.stopTitleMusic();
@@ -112,6 +116,7 @@ async function startGame() {
 
   window.setTimeout(() => {
     titleScreen.hidden = true;
+    optionsToggle.hidden = false;
     game.start();
   }, 350);
 }
@@ -136,4 +141,18 @@ function updateRoundControls({ state, score, level }) {
   if (isRoundOver) {
     restartButton.textContent = state === "won" ? `Level ${level + 1} — score ${score}` : "Restart from Level 1";
   }
+}
+
+function setOptionsOpen(isOpen) {
+  optionsPanel.hidden = !isOpen;
+  optionsToggle.setAttribute("aria-expanded", String(isOpen));
+}
+
+function requestGameFullscreen() {
+  if (document.fullscreenElement) return;
+
+  const requestFullscreen = document.documentElement.requestFullscreen ?? document.documentElement.webkitRequestFullscreen;
+  if (typeof requestFullscreen !== "function") return;
+  const fullscreenResult = requestFullscreen.call(document.documentElement, { navigationUI: "hide" });
+  if (fullscreenResult && typeof fullscreenResult.catch === "function") fullscreenResult.catch(() => {});
 }

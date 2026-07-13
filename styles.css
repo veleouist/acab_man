@@ -157,7 +157,7 @@ body {
   border: 2px solid #4f7cff;
   border-radius: 0.75rem;
   display: block;
-  max-height: 80svh;
+  max-height: 90svh;
   max-width: 100%;
   touch-action: none;
 }
@@ -172,7 +172,8 @@ body {
 .restart-button,
 .pause-button,
 .sound-button,
-.haptics-button {
+.haptics-button,
+.options-toggle {
   background: #fff2b5;
   border: 0;
   border-radius: 0.6rem;
@@ -185,18 +186,39 @@ body {
   touch-action: manipulation;
 }
 
-.hud-controls {
-  align-items: center;
-  display: flex;
-  gap: 0.5rem;
-  justify-content: center;
+.options-toggle {
+  position: fixed;
+  right: max(0.75rem, env(safe-area-inset-right));
+  top: max(0.75rem, env(safe-area-inset-top));
+  z-index: 5;
+}
+
+.options-panel {
+  background: rgba(8, 15, 28, 0.92);
+  border: 1px solid rgba(219, 234, 254, 0.35);
+  border-radius: 0.8rem;
+  box-shadow: 0 0.65rem 1.5rem rgba(0, 0, 0, 0.28);
+  padding: 0.45rem;
+  position: fixed;
+  right: max(0.75rem, env(safe-area-inset-right));
+  top: calc(max(0.75rem, env(safe-area-inset-top)) + 2.8rem);
+  z-index: 5;
+}
+
+.options-controls {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.options-controls button {
   width: 100%;
 }
 
 .restart-button:focus-visible,
 .pause-button:focus-visible,
 .sound-button:focus-visible,
-.haptics-button:focus-visible {
+.haptics-button:focus-visible,
+.options-toggle:focus-visible {
   outline: 3px solid #4f7cff;
   outline-offset: 3px;
 }
@@ -215,6 +237,11 @@ body {
     opacity: 0;
     transform: translateY(-0.5rem);
   }
+}
+
+.options-toggle[hidden],
+.options-panel[hidden] {
+  display: none;
 }
 
 @keyframes intro-pulse {

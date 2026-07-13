@@ -10,7 +10,7 @@
     <title>ACAB-MAN</title>
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="APP_ICON.png" />
-    <link rel="stylesheet" href="styles.css?v=20" />
+    <link rel="stylesheet" href="styles.css?v=21" />
   </head>
   <body>
     <div class="intro-screen" id="intro-screen" role="button" tabindex="0" aria-label="Start ACAB-MAN">
@@ -27,13 +27,18 @@
     <main class="game-shell">
       <canvas id="game-canvas" aria-label="ACAB-MAN game area"></canvas>
       <p class="status" id="status" aria-live="polite">Loading game…</p>
-      <div class="hud-controls" aria-label="Game controls">
+    </main>
+    <button class="options-toggle" id="options-toggle" type="button" aria-controls="options-panel" aria-expanded="false" hidden>
+      Options
+    </button>
+    <section class="options-panel" id="options-panel" aria-label="Game options" hidden>
+      <div class="options-controls">
         <button class="pause-button" id="pause-button" type="button">Pause</button>
         <button class="sound-button" id="sound-button" type="button">Sound: on</button>
         <button class="haptics-button" id="haptics-button" type="button">Vibe: on</button>
         <button class="restart-button" id="restart-button" type="button" hidden>Play again</button>
       </div>
-    </main>
-    <script type="module" src="src/main.js?v=20"></script>
+    </section>
+    <script type="module" src="src/main.js?v=21"></script>
   </body>
 </html>
