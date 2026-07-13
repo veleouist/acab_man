@@ -1,4 +1,4 @@
-const CACHE_NAME = "acab-man-v8";
+const CACHE_NAME = "acab-man-v9";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,7 +11,7 @@ const APP_SHELL = [
   "./PIGLETS.png",
   "./COCKTAIL.png",
   "./SQUARE.png",
-  "./src/main.js?v=8",
+  "./src/main.js?v=9",
   "./src/game/Background.js",
   "./src/game/Enemy.js",
   "./src/game/Game.js",

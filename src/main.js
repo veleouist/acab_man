@@ -82,8 +82,7 @@ async function dismissIntro() {
   if (introDismissed) return;
   introDismissed = true;
   introScreen.removeEventListener("keydown", handleIntroKey);
-  await sound.unlock();
-  sound.playIntro();
+  void sound.unlock().then(() => sound.playIntro()).catch(() => {});
   introScreen.classList.add("is-fading-out");
 
   window.setTimeout(() => {
@@ -97,7 +96,7 @@ async function startGame() {
   if (hasStarted) return;
   hasStarted = true;
   titleScreen.removeEventListener("keydown", handleTitleKey);
-  await sound.unlock();
+  void sound.unlock();
   titleScreen.classList.add("is-fading-out");
 
   window.setTimeout(() => {
