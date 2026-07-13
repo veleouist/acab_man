@@ -21,11 +21,12 @@ export class SoundController {
   }
 
   playPellet() {
-    this.playTone({ frequency: 620, duration: 0.04, type: "square", volume: 0.025 });
+    this.playTone({ frequency: 720, endFrequency: 980, duration: 0.055, type: "square", volume: 0.045 });
   }
 
   playPower() {
-    this.playTone({ frequency: 210, duration: 0.22, type: "sawtooth", volume: 0.07 });
+    this.playTone({ frequency: 190, endFrequency: 680, duration: 0.32, type: "sawtooth", volume: 0.075 });
+    this.playTone({ frequency: 820, endFrequency: 1240, duration: 0.18, type: "triangle", volume: 0.06, startDelay: 0.14 });
   }
 
   playEnemyClear() {
@@ -48,14 +49,15 @@ export class SoundController {
     this.playTone({ frequency: 1120, duration: 0.2, type: "triangle", volume: 0.07 });
   }
 
-  playTone({ frequency, duration, type, volume }) {
+  playTone({ frequency, endFrequency = frequency, duration, type, volume, startDelay = 0 }) {
     if (this.isMuted || !this.context || this.context.state !== "running") return;
 
     const oscillator = this.context.createOscillator();
     const gain = this.context.createGain();
-    const now = this.context.currentTime;
+    const now = this.context.currentTime + startDelay;
     oscillator.type = type;
     oscillator.frequency.setValueAtTime(frequency, now);
+    oscillator.frequency.exponentialRampToValueAtTime(endFrequency, now + duration);
     gain.gain.setValueAtTime(volume, now);
     gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
     oscillator.connect(gain).connect(this.context.destination);

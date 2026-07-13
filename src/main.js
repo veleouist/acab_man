@@ -5,7 +5,7 @@ import { InputController } from "./game/InputController.js";
 import { Maze } from "./game/Maze.js";
 import { Player } from "./game/Player.js";
 import { PowerPickup } from "./game/PowerPickup.js";
-import { SoundController } from "./game/SoundController.js";
+import { SoundController } from "./game/SoundController.js?v=13";
 
 const canvas = document.querySelector("#game-canvas");
 const statusElement = document.querySelector("#status");
