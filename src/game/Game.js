@@ -20,7 +20,7 @@ export class Game {
     this.sound = sound;
     this.haptics = haptics;
     this.gameOverLogo = new Image();
-    this.gameOverLogo.src = "./GAME_OVER.png";
+    this.gameOverLogo.src = "./assets/images/GAME_OVER.png";
     this.score = 0;
     this.lives = 3;
     this.level = 1;

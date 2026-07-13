@@ -14,7 +14,7 @@ export class SoundController {
   constructor() {
     this.context = null;
     this.isMuted = false;
-    this.titleMusic = new Audio("./TITLE_MUSIC.mp3");
+    this.titleMusic = new Audio("./assets/audio/TITLE_MUSIC.mp3");
     this.titleMusic.loop = true;
     this.titleMusic.preload = "auto";
     this.titleMusic.volume = 0;

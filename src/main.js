@@ -1,4 +1,4 @@
-import { Game } from "./game/Game.js?v=24";
+import { Game } from "./game/Game.js?v=26";
 import { Background } from "./game/Background.js";
 import { Enemy } from "./game/Enemy.js?v=23";
 import { InputController } from "./game/InputController.js?v=22";
@@ -7,7 +7,7 @@ import { LeaderboardController } from "./game/LeaderboardController.js?v=25";
 import { Maze } from "./game/Maze.js";
 import { Player } from "./game/Player.js?v=23";
 import { PowerPickup } from "./game/PowerPickup.js";
-import { SoundController } from "./game/SoundController.js?v=24";
+import { SoundController } from "./game/SoundController.js?v=26";
 
 const canvas = document.querySelector("#game-canvas");
 const statusElement = document.querySelector("#status");
@@ -38,24 +38,24 @@ const leaderboard = new LeaderboardController({
 
 const maze = new Maze();
 const input = new InputController(document.body);
-const background = new Background("./SQUARE.png");
+const background = new Background("./assets/images/SQUARE.png");
 const sound = new SoundController();
 const haptics = new HapticsController();
 let playerName = loadStoredPlayerName();
-const player = new Player({ column: 7, row: 13, spriteUrl: "./ACAB_MAN.png" });
+const player = new Player({ column: 7, row: 13, spriteUrl: "./assets/images/ACAB_MAN.png" });
 const powerPickups = [
-  new PowerPickup({ column: 1, row: 1, spriteUrl: "./COCKTAIL.png" }),
-  new PowerPickup({ column: 13, row: 1, spriteUrl: "./COCKTAIL.png" }),
-  new PowerPickup({ column: 1, row: 13, spriteUrl: "./COCKTAIL.png" }),
-  new PowerPickup({ column: 13, row: 13, spriteUrl: "./COCKTAIL.png" }),
+  new PowerPickup({ column: 1, row: 1, spriteUrl: "./assets/images/COCKTAIL.png" }),
+  new PowerPickup({ column: 13, row: 1, spriteUrl: "./assets/images/COCKTAIL.png" }),
+  new PowerPickup({ column: 1, row: 13, spriteUrl: "./assets/images/COCKTAIL.png" }),
+  new PowerPickup({ column: 13, row: 13, spriteUrl: "./assets/images/COCKTAIL.png" }),
 ];
 const enemies = [
-  new Enemy({ column: 5, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "chase", tintColor: "rgba(250, 204, 21, 0.48)" }),
-  new Enemy({ column: 6, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "intercept", tintColor: "rgba(244, 114, 182, 0.48)" }),
+  new Enemy({ column: 5, row: 7, spriteUrl: "./assets/images/PIGLETS.png", behaviour: "chase", tintColor: "rgba(250, 204, 21, 0.48)" }),
+  new Enemy({ column: 6, row: 7, spriteUrl: "./assets/images/PIGLETS.png", behaviour: "intercept", tintColor: "rgba(244, 114, 182, 0.48)" }),
   new Enemy({
     column: 8,
     row: 7,
-    spriteUrl: "./PIGLETS.png",
+    spriteUrl: "./assets/images/PIGLETS.png",
     behaviour: "patrol",
     tintColor: "rgba(163, 230, 53, 0.48)",
     patrolPoints: [
@@ -63,7 +63,7 @@ const enemies = [
       { column: 9, row: 7 },
     ],
   }),
-  new Enemy({ column: 9, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "chase", tintColor: "rgba(196, 181, 253, 0.52)" }),
+  new Enemy({ column: 9, row: 7, spriteUrl: "./assets/images/PIGLETS.png", behaviour: "chase", tintColor: "rgba(196, 181, 253, 0.52)" }),
 ];
 const game = new Game(canvas, statusElement, maze, input, player, enemies, updateRoundControls, background, powerPickups, sound, haptics);
 

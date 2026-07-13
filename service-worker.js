@@ -1,23 +1,23 @@
-const CACHE_NAME = "acab-man-v25";
+const CACHE_NAME = "acab-man-v26";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css?v=25",
   "./manifest.webmanifest",
   "./APP_ICON.png",
-  "./logo.png",
-  "./START_SCREEN.png",
-  "./ACAB_MAN.png",
-  "./PIGLETS.png",
-  "./COCKTAIL.png",
-  "./SQUARE.png",
-  "./GAME_OVER.png",
-  "./TITLE_BACKGROUND.mp4.mp4",
-  "./TITLE_MUSIC.mp3",
-  "./src/main.js?v=25",
+  "./assets/images/logo.png",
+  "./assets/images/START_SCREEN.png",
+  "./assets/images/ACAB_MAN.png",
+  "./assets/images/PIGLETS.png",
+  "./assets/images/COCKTAIL.png",
+  "./assets/images/SQUARE.png",
+  "./assets/images/GAME_OVER.png",
+  "./assets/video/TITLE_BACKGROUND.mp4.mp4",
+  "./assets/audio/TITLE_MUSIC.mp3",
+  "./src/main.js?v=26",
   "./src/game/Background.js",
   "./src/game/Enemy.js?v=23",
-  "./src/game/Game.js?v=24",
+  "./src/game/Game.js?v=26",
   "./src/game/HapticsController.js?v=19",
   "./src/game/InputController.js?v=22",
   "./src/game/LeaderboardController.js?v=25",
@@ -25,7 +25,7 @@ const APP_SHELL = [
   "./src/game/Player.js?v=23",
   "./src/game/PowerPickup.js",
   "./src/game/SmoothMovement.js?v=23",
-  "./src/game/SoundController.js?v=24"
+  "./src/game/SoundController.js?v=26"
 ];
 
 self.addEventListener("install", (event) => {
