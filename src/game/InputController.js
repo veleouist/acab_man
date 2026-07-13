@@ -2,16 +2,22 @@ const SWIPE_DISTANCE = 28;
 
 /** Collects intent without coupling keyboard or touch events to game entities. */
 export class InputController {
-  constructor(canvas) {
+  constructor(inputTarget) {
     this.latestDirection = null;
     this.startPoint = null;
+    this.isActive = false;
 
     window.addEventListener("keydown", (event) => this.handleKeyDown(event));
-    canvas.addEventListener("pointerdown", (event) => this.handlePointerDown(event));
-    canvas.addEventListener("pointerup", (event) => this.handlePointerUp(event));
-    canvas.addEventListener("pointercancel", () => {
+    inputTarget.addEventListener("pointerdown", (event) => this.handlePointerDown(event));
+    window.addEventListener("pointerup", (event) => this.handlePointerUp(event));
+    window.addEventListener("pointercancel", () => {
       this.startPoint = null;
     });
+  }
+
+  setActive(isActive) {
+    this.isActive = isActive;
+    if (!isActive) this.startPoint = null;
   }
 
   consumeDirection() {
@@ -21,6 +27,8 @@ export class InputController {
   }
 
   handleKeyDown(event) {
+    if (!this.isActive) return;
+
     const keyDirections = {
       ArrowUp: "up",
       ArrowDown: "down",
@@ -39,11 +47,12 @@ export class InputController {
   }
 
   handlePointerDown(event) {
+    if (!this.isActive || event.target?.closest?.("button")) return;
     this.startPoint = { x: event.clientX, y: event.clientY };
   }
 
   handlePointerUp(event) {
-    if (!this.startPoint) return;
+    if (!this.isActive || !this.startPoint) return;
 
     const horizontal = event.clientX - this.startPoint.x;
     const vertical = event.clientY - this.startPoint.y;

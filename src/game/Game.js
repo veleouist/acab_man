@@ -29,8 +29,12 @@ export class Game {
     this.respawnTimeRemaining = 0;
     this.lastFrameTime = 0;
     this.isRunning = false;
+    this.viewportWidth = null;
+    this.viewportHeight = null;
 
     this.resize = this.resize.bind(this);
+    this.handleResize = () => this.resize();
+    this.handleOrientationChange = () => this.resize(true);
     this.frame = this.frame.bind(this);
 
     this.preparePowerPickups();
@@ -41,9 +45,11 @@ export class Game {
   }
 
   start() {
-    window.addEventListener("resize", this.resize);
-    this.resize();
+    window.addEventListener("resize", this.handleResize);
+    window.addEventListener("orientationchange", this.handleOrientationChange);
+    this.resize(true);
     this.isRunning = true;
+    this.input.setActive(true);
     this.sound?.startGameplayMusic();
     requestAnimationFrame(this.frame);
   }
@@ -61,6 +67,7 @@ export class Game {
     this.isGameOver = false;
     this.isPaused = false;
     this.respawnTimeRemaining = 0;
+    this.input.setActive(true);
     this.setLevelDifficulty();
     this.collectPelletAtPlayer();
     this.sound?.startGameplayMusic();
@@ -81,6 +88,7 @@ export class Game {
     this.isGameOver = false;
     this.isPaused = false;
     this.respawnTimeRemaining = 0;
+    this.input.setActive(true);
     this.setLevelDifficulty();
     this.collectPelletAtPlayer();
     this.sound?.startGameplayMusic();
@@ -93,16 +101,23 @@ export class Game {
     if (this.isLevelComplete || this.isGameOver) return false;
 
     this.isPaused = !this.isPaused;
+    this.input.setActive(!this.isPaused);
     this.sound?.setGameplayMusicPaused(this.isPaused);
     this.statusElement.textContent = this.isPaused ? "Game paused." : "Game resumed.";
     this.notifyRoundStateChange(this.isPaused ? "paused" : "playing");
     return this.isPaused;
   }
 
-  resize() {
-    // Keep a consistent portrait playfield while letting CSS fit it on phones.
-    const maximumWidth = Math.min(window.innerWidth - 16, 480);
-    const maximumHeight = Math.min(window.innerHeight * 0.8, 720);
+  resize(force = false) {
+    // Ignore height-only resize events from mobile browser chrome. The canvas
+    // updates only when the width/orientation actually changes.
+    const viewportWidth = window.innerWidth;
+    if (!force && viewportWidth === this.viewportWidth) return;
+
+    this.viewportWidth = viewportWidth;
+    this.viewportHeight = window.innerHeight;
+    const maximumWidth = Math.min(viewportWidth - 16, 480);
+    const maximumHeight = Math.min(this.viewportHeight * 0.8, 720);
     const width = Math.floor(Math.min(maximumWidth, maximumHeight * PLAYFIELD_ASPECT_RATIO));
     const height = Math.floor(width / PLAYFIELD_ASPECT_RATIO);
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
@@ -233,6 +248,7 @@ export class Game {
   finishRound(result, message) {
     this.isLevelComplete = result === "won";
     this.isGameOver = result === "lost";
+    this.input.setActive(false);
     this.sound?.stopGameplayMusic();
     if (result === "won") this.sound?.playWin();
     if (result === "lost") this.sound?.playGameOver();

@@ -2,6 +2,7 @@
   color-scheme: dark;
   background: #111827;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  overscroll-behavior: none;
 }
 
 * {
@@ -10,9 +11,13 @@
 
 body {
   display: grid;
-  min-height: 100dvh;
+  height: 100svh;
   margin: 0;
+  min-height: 100svh;
+  overflow: hidden;
+  overscroll-behavior: none;
   place-items: center;
+  touch-action: none;
 }
 
 .intro-screen {
@@ -149,7 +154,7 @@ body {
   border: 2px solid #4f7cff;
   border-radius: 0.75rem;
   display: block;
-  max-height: 80dvh;
+  max-height: 80svh;
   max-width: 100%;
   touch-action: none;
 }
@@ -173,6 +178,7 @@ body {
   min-height: 2.25rem;
   padding: 0.55rem 0.8rem;
   white-space: nowrap;
+  touch-action: manipulation;
 }
 
 .hud-controls {

@@ -1,7 +1,7 @@
-import { Game } from "./game/Game.js?v=17";
+import { Game } from "./game/Game.js?v=18";
 import { Background } from "./game/Background.js";
 import { Enemy } from "./game/Enemy.js";
-import { InputController } from "./game/InputController.js";
+import { InputController } from "./game/InputController.js?v=18";
 import { Maze } from "./game/Maze.js";
 import { Player } from "./game/Player.js";
 import { PowerPickup } from "./game/PowerPickup.js";
@@ -16,7 +16,7 @@ const pauseButton = document.querySelector("#pause-button");
 const soundButton = document.querySelector("#sound-button");
 
 const maze = new Maze();
-const input = new InputController(canvas);
+const input = new InputController(document.body);
 const background = new Background("./SQUARE.png");
 const sound = new SoundController();
 const player = new Player({ column: 7, row: 13, spriteUrl: "./ACAB_MAN.png" });
