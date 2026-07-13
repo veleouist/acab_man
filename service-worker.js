@@ -1,8 +1,8 @@
-const CACHE_NAME = "acab-man-v24";
+const CACHE_NAME = "acab-man-v25";
 const APP_SHELL = [
   "./",
   "./index.html",
-  "./styles.css?v=21",
+  "./styles.css?v=25",
   "./manifest.webmanifest",
   "./APP_ICON.png",
   "./logo.png",
@@ -14,12 +14,13 @@ const APP_SHELL = [
   "./GAME_OVER.png",
   "./TITLE_BACKGROUND.mp4.mp4",
   "./TITLE_MUSIC.mp3",
-  "./src/main.js?v=24",
+  "./src/main.js?v=25",
   "./src/game/Background.js",
   "./src/game/Enemy.js?v=23",
   "./src/game/Game.js?v=24",
   "./src/game/HapticsController.js?v=19",
   "./src/game/InputController.js?v=22",
+  "./src/game/LeaderboardController.js?v=25",
   "./src/game/Maze.js",
   "./src/game/Player.js?v=23",
   "./src/game/PowerPickup.js",
