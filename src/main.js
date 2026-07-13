@@ -5,7 +5,7 @@ import { InputController } from "./game/InputController.js";
 import { Maze } from "./game/Maze.js";
 import { Player } from "./game/Player.js";
 import { PowerPickup } from "./game/PowerPickup.js";
-import { SoundController } from "./game/SoundController.js?v=13";
+import { SoundController } from "./game/SoundController.js?v=14";
 
 const canvas = document.querySelector("#game-canvas");
 const statusElement = document.querySelector("#status");
@@ -84,11 +84,13 @@ async function dismissIntro() {
   introDismissed = true;
   introScreen.removeEventListener("keydown", handleIntroKey);
   void sound.unlock().then(() => sound.playIntro()).catch(() => {});
+  sound.queueTitleMusic();
   introScreen.classList.add("is-fading-out");
 
   window.setTimeout(() => {
     introScreen.hidden = true;
     titleScreen.hidden = false;
+    sound.revealTitleMusic();
     titleScreen.focus();
   }, 450);
 }
@@ -98,6 +100,7 @@ async function startGame() {
   hasStarted = true;
   titleScreen.removeEventListener("keydown", handleTitleKey);
   void sound.unlock();
+  sound.stopTitleMusic();
   titleScreen.classList.add("is-fading-out");
 
   window.setTimeout(() => {

@@ -1,8 +1,15 @@
-/** Lightweight synthesized feedback that needs no external audio files. */
+const TITLE_MUSIC_VOLUME = 0.28;
+
+/** Lightweight synthesized feedback plus title music. */
 export class SoundController {
   constructor() {
     this.context = null;
     this.isMuted = false;
+    this.titleMusic = new Audio("./TITLE_MUSIC.mp3");
+    this.titleMusic.loop = true;
+    this.titleMusic.preload = "auto";
+    this.titleMusic.volume = 0;
+    this.titleFadeFrame = null;
   }
 
   async unlock() {
@@ -17,7 +24,31 @@ export class SoundController {
 
   toggleMute() {
     this.isMuted = !this.isMuted;
+    this.titleMusic.muted = this.isMuted;
     return this.isMuted;
+  }
+
+  queueTitleMusic() {
+    if (this.isMuted) return;
+
+    this.cancelTitleFade();
+    this.titleMusic.pause();
+    this.titleMusic.currentTime = 0;
+    this.titleMusic.volume = 0;
+    const playback = this.titleMusic.play();
+    if (playback) playback.catch(() => {});
+  }
+
+  revealTitleMusic() {
+    if (this.isMuted) return;
+    this.fadeTitleMusicTo(TITLE_MUSIC_VOLUME, 220);
+  }
+
+  stopTitleMusic() {
+    this.fadeTitleMusicTo(0, 350, () => {
+      this.titleMusic.pause();
+      this.titleMusic.currentTime = 0;
+    });
   }
 
   playPellet() {
@@ -63,5 +94,31 @@ export class SoundController {
     oscillator.connect(gain).connect(this.context.destination);
     oscillator.start(now);
     oscillator.stop(now + duration);
+  }
+
+  fadeTitleMusicTo(targetVolume, duration, onComplete = () => {}) {
+    this.cancelTitleFade();
+    const startingVolume = this.titleMusic.volume;
+    const startedAt = performance.now();
+
+    const animate = (timestamp) => {
+      const progress = Math.min(1, (timestamp - startedAt) / duration);
+      this.titleMusic.volume = startingVolume + (targetVolume - startingVolume) * progress;
+      if (progress < 1) {
+        this.titleFadeFrame = requestAnimationFrame(animate);
+        return;
+      }
+
+      this.titleFadeFrame = null;
+      onComplete();
+    };
+
+    this.titleFadeFrame = requestAnimationFrame(animate);
+  }
+
+  cancelTitleFade() {
+    if (this.titleFadeFrame === null) return;
+    cancelAnimationFrame(this.titleFadeFrame);
+    this.titleFadeFrame = null;
   }
 }
