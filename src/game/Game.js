@@ -6,7 +6,7 @@ const PLAYFIELD_ASPECT_RATIO = 9 / 16;
  * gameplay rules to browser events.
  */
 export class Game {
-  constructor(canvas, statusElement, maze, input, player, enemies, onRoundStateChange = () => {}, background = null, powerPickups = [], sound = null) {
+  constructor(canvas, statusElement, maze, input, player, enemies, onRoundStateChange = () => {}, background = null, powerPickups = [], sound = null, haptics = null) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
     this.statusElement = statusElement;
@@ -18,6 +18,7 @@ export class Game {
     this.background = background;
     this.powerPickups = powerPickups;
     this.sound = sound;
+    this.haptics = haptics;
     this.gameOverLogo = new Image();
     this.gameOverLogo.src = "./GAME_OVER.png";
     this.score = 0;
@@ -194,6 +195,7 @@ export class Game {
         bonus *= 2;
       });
       this.sound?.playEnemyClear();
+      this.haptics?.playEnemyClear();
       this.statusElement.textContent = `Enemy cleared! Score: ${this.score}`;
       return;
     }
@@ -208,6 +210,7 @@ export class Game {
     this.enemies.forEach((enemy) => enemy.reset());
     this.respawnTimeRemaining = RESPAWN_DELAY_SECONDS;
     this.sound?.playCaught();
+    this.haptics?.playCaught();
     this.statusElement.textContent = `Caught! ${this.lives} lives remaining.`;
   }
 
@@ -230,6 +233,7 @@ export class Game {
     this.score += 50;
     this.enemies.forEach((enemy) => enemy.makeVulnerable());
     this.sound?.playPower();
+    this.haptics?.playPower();
     this.statusElement.textContent = "Power active! Vulnerable enemies can be cleared.";
 
     if (this.getRemainingCollectibles() === 0) {
@@ -252,6 +256,8 @@ export class Game {
     this.sound?.stopGameplayMusic();
     if (result === "won") this.sound?.playWin();
     if (result === "lost") this.sound?.playGameOver();
+    if (result === "won") this.haptics?.playWin();
+    if (result === "lost") this.haptics?.playGameOver();
     this.statusElement.textContent = message;
     this.notifyRoundStateChange(result);
   }

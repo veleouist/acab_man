@@ -1,7 +1,8 @@
-import { Game } from "./game/Game.js?v=18";
+import { Game } from "./game/Game.js?v=19";
 import { Background } from "./game/Background.js";
 import { Enemy } from "./game/Enemy.js";
 import { InputController } from "./game/InputController.js?v=18";
+import { HapticsController } from "./game/HapticsController.js?v=19";
 import { Maze } from "./game/Maze.js";
 import { Player } from "./game/Player.js";
 import { PowerPickup } from "./game/PowerPickup.js";
@@ -14,11 +15,13 @@ const titleScreen = document.querySelector("#title-screen");
 const restartButton = document.querySelector("#restart-button");
 const pauseButton = document.querySelector("#pause-button");
 const soundButton = document.querySelector("#sound-button");
+const hapticsButton = document.querySelector("#haptics-button");
 
 const maze = new Maze();
 const input = new InputController(document.body);
 const background = new Background("./SQUARE.png");
 const sound = new SoundController();
+const haptics = new HapticsController();
 const player = new Player({ column: 7, row: 13, spriteUrl: "./ACAB_MAN.png" });
 const powerPickups = [
   new PowerPickup({ column: 1, row: 1, spriteUrl: "./COCKTAIL.png" }),
@@ -42,7 +45,7 @@ const enemies = [
   }),
   new Enemy({ column: 9, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "chase", tintColor: "rgba(196, 181, 253, 0.52)" }),
 ];
-const game = new Game(canvas, statusElement, maze, input, player, enemies, updateRoundControls, background, powerPickups, sound);
+const game = new Game(canvas, statusElement, maze, input, player, enemies, updateRoundControls, background, powerPickups, sound, haptics);
 
 statusElement.textContent = "Escape the patrol — swipe on the game screen to move.";
 
@@ -55,6 +58,10 @@ soundButton.addEventListener("click", () => {
   const isMuted = sound.toggleMute();
   soundButton.textContent = isMuted ? "Sound: off" : "Sound: on";
   if (!isMuted) sound.unlock();
+});
+hapticsButton.addEventListener("click", () => {
+  const isEnabled = haptics.toggle();
+  hapticsButton.textContent = isEnabled ? "Vibe: on" : "Vibe: off";
 });
 window.addEventListener("pointerdown", () => sound.unlock());
 window.addEventListener("keydown", () => sound.unlock());

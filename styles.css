@@ -168,7 +168,8 @@ body {
 
 .restart-button,
 .pause-button,
-.sound-button {
+.sound-button,
+.haptics-button {
   background: #fff2b5;
   border: 0;
   border-radius: 0.6rem;
@@ -191,7 +192,8 @@ body {
 
 .restart-button:focus-visible,
 .pause-button:focus-visible,
-.sound-button:focus-visible {
+.sound-button:focus-visible,
+.haptics-button:focus-visible {
   outline: 3px solid #4f7cff;
   outline-offset: 3px;
 }
