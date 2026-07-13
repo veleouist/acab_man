@@ -1,4 +1,4 @@
-const CACHE_NAME = "acab-man-v23";
+const CACHE_NAME = "acab-man-v24";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -14,17 +14,17 @@ const APP_SHELL = [
   "./GAME_OVER.png",
   "./TITLE_BACKGROUND.mp4.mp4",
   "./TITLE_MUSIC.mp3",
-  "./src/main.js?v=23",
+  "./src/main.js?v=24",
   "./src/game/Background.js",
   "./src/game/Enemy.js?v=23",
-  "./src/game/Game.js?v=23",
+  "./src/game/Game.js?v=24",
   "./src/game/HapticsController.js?v=19",
   "./src/game/InputController.js?v=22",
   "./src/game/Maze.js",
   "./src/game/Player.js?v=23",
   "./src/game/PowerPickup.js",
   "./src/game/SmoothMovement.js?v=23",
-  "./src/game/SoundController.js?v=16"
+  "./src/game/SoundController.js?v=24"
 ];
 
 self.addEventListener("install", (event) => {

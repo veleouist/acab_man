@@ -149,7 +149,10 @@ export class Game {
     if (this.respawnTimeRemaining > 0) {
       this.input.consumeDirection();
       this.respawnTimeRemaining = Math.max(0, this.respawnTimeRemaining - elapsedSeconds);
-      if (this.respawnTimeRemaining === 0) this.statusElement.textContent = "Go!";
+      if (this.respawnTimeRemaining === 0) {
+        this.sound?.setGameplayMusicPaused(false);
+        this.statusElement.textContent = "Go!";
+      }
       return;
     }
 
@@ -211,6 +214,7 @@ export class Game {
     this.player.reset();
     this.enemies.forEach((enemy) => enemy.reset());
     this.respawnTimeRemaining = RESPAWN_DELAY_SECONDS;
+    this.sound?.setGameplayMusicPaused(true);
     this.sound?.playCaught();
     this.haptics?.playCaught();
     this.statusElement.textContent = `Caught! ${this.lives} lives remaining.`;

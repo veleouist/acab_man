@@ -99,7 +99,9 @@ export class SoundController {
   }
 
   playCaught() {
-    this.playTone({ frequency: 130, duration: 0.3, type: "sawtooth", volume: 0.07 });
+    // A quick descending phrase marks a lost life without sounding gloomy.
+    this.playChiptune([880, 784, 659, 523], { step: 0.09, duration: 0.08, type: "square", volume: 0.052 });
+    this.playTone({ frequency: 147, endFrequency: 73, duration: 0.42, type: "triangle", volume: 0.045 });
   }
 
   playWin() {
@@ -107,7 +109,9 @@ export class SoundController {
   }
 
   playGameOver() {
-    this.playTone({ frequency: 105, duration: 0.42, type: "sawtooth", volume: 0.08 });
+    // A longer, lower ending phrase makes the final loss unmistakable.
+    this.playChiptune([523, 466, 392, 294, 196], { step: 0.135, duration: 0.12, type: "square", volume: 0.06 });
+    this.playTone({ frequency: 131, endFrequency: 55, duration: 0.78, type: "triangle", volume: 0.055 });
   }
 
   playIntro() {
@@ -128,6 +132,13 @@ export class SoundController {
     oscillator.connect(gain).connect(this.context.destination);
     oscillator.start(now);
     oscillator.stop(now + duration);
+  }
+
+  playChiptune(notes, { step, duration, type, volume }) {
+    notes.forEach((frequency, index) => {
+      if (!frequency) return;
+      this.playTone({ frequency, duration, type, volume, startDelay: index * step });
+    });
   }
 
   fadeTitleMusicTo(targetVolume, duration, onComplete = () => {}) {
