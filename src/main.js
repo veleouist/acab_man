@@ -27,19 +27,20 @@ const powerPickups = [
   new PowerPickup({ column: 13, row: 13, spriteUrl: "./COCKTAIL.png" }),
 ];
 const enemies = [
-  new Enemy({ column: 5, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "chase" }),
-  new Enemy({ column: 6, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "intercept" }),
+  new Enemy({ column: 5, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "chase", tintColor: "rgba(250, 204, 21, 0.48)" }),
+  new Enemy({ column: 6, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "intercept", tintColor: "rgba(244, 114, 182, 0.48)" }),
   new Enemy({
     column: 8,
     row: 7,
     spriteUrl: "./PIGLETS.png",
     behaviour: "patrol",
+    tintColor: "rgba(163, 230, 53, 0.48)",
     patrolPoints: [
       { column: 5, row: 7 },
       { column: 9, row: 7 },
     ],
   }),
-  new Enemy({ column: 9, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "chase" }),
+  new Enemy({ column: 9, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "chase", tintColor: "rgba(196, 181, 253, 0.52)" }),
 ];
 const game = new Game(canvas, statusElement, maze, input, player, enemies, updateRoundControls, background, powerPickups, sound);
 

@@ -11,18 +11,20 @@ const OPPOSITE_DIRECTIONS = { up: "down", down: "up", left: "right", right: "lef
 
 /** A maze enemy with a lightweight, deterministic pursuit/patrol behaviour. */
 export class Enemy {
-  constructor({ column, row, spriteUrl, behaviour, patrolPoints = [] }) {
+  constructor({ column, row, spriteUrl, behaviour, patrolPoints = [], tintColor = null }) {
     this.spawnColumn = column;
     this.spawnRow = row;
     this.column = column;
     this.row = row;
     this.behaviour = behaviour;
     this.patrolPoints = patrolPoints;
+    this.tintColor = tintColor;
     this.patrolPointIndex = 0;
     this.direction = null;
     this.moveElapsed = 0;
     this.vulnerableTimeRemaining = 0;
     this.vulnerableSprite = null;
+    this.tintedSprite = null;
     this.speedMultiplier = 1;
     this.sprite = new Image();
     this.sprite.src = spriteUrl;
@@ -122,12 +124,12 @@ export class Enemy {
     const y = center.y - height / 2;
 
     if (this.sprite.complete && this.sprite.naturalWidth > 0) {
-      const sprite = this.isVulnerable() ? this.getVulnerableSprite() : this.sprite;
+      const sprite = this.isVulnerable() ? this.getVulnerableSprite() : this.getTintedSprite();
       context.drawImage(sprite, x, y, width, height);
       return;
     }
 
-    context.fillStyle = this.isVulnerable() ? "#3b82f6" : "#6b7280";
+    context.fillStyle = this.isVulnerable() ? "#3b82f6" : this.tintColor ?? "#6b7280";
     context.beginPath();
     context.ellipse(center.x, center.y, width / 2, height / 2, 0, 0, Math.PI * 2);
     context.fill();
@@ -136,6 +138,19 @@ export class Enemy {
   getVulnerableSprite() {
     if (this.vulnerableSprite) return this.vulnerableSprite;
 
+    this.vulnerableSprite = this.createTintedSprite("rgba(59, 130, 246, 0.68)");
+    return this.vulnerableSprite;
+  }
+
+  getTintedSprite() {
+    if (!this.tintColor) return this.sprite;
+    if (this.tintedSprite) return this.tintedSprite;
+
+    this.tintedSprite = this.createTintedSprite(this.tintColor);
+    return this.tintedSprite;
+  }
+
+  createTintedSprite(tintColor) {
     const canvas = document.createElement("canvas");
     canvas.width = this.sprite.naturalWidth;
     canvas.height = this.sprite.naturalHeight;
@@ -145,9 +160,8 @@ export class Enemy {
     // avoiding the rectangular tint produced on the already-painted game canvas.
     tintContext.drawImage(this.sprite, 0, 0);
     tintContext.globalCompositeOperation = "source-atop";
-    tintContext.fillStyle = "rgba(59, 130, 246, 0.68)";
+    tintContext.fillStyle = tintColor;
     tintContext.fillRect(0, 0, canvas.width, canvas.height);
-    this.vulnerableSprite = canvas;
-    return this.vulnerableSprite;
+    return canvas;
   }
 }

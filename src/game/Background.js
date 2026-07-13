@@ -32,7 +32,7 @@ export class Background {
     }
 
     context.drawImage(this.image, sourceX, sourceY, sourceWidth, sourceHeight, x, y, width, height);
-    context.fillStyle = "rgba(8, 15, 28, 0.46)";
+    context.fillStyle = "rgba(8, 15, 28, 0.58)";
     context.fillRect(x, y, width, height);
   }
 }
