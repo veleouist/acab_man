@@ -1,0 +1,17 @@
+{
+  "name": "ACAB-MAN: Square Chase",
+  "short_name": "ACAB-MAN",
+  "description": "A mobile maze-chase game set in Exarcheia Square.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "./APP_ICON.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

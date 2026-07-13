@@ -1,0 +1,104 @@
+import { Game } from "./game/Game.js";
+import { Background } from "./game/Background.js";
+import { Enemy } from "./game/Enemy.js";
+import { InputController } from "./game/InputController.js";
+import { Maze } from "./game/Maze.js";
+import { Player } from "./game/Player.js";
+import { PowerPickup } from "./game/PowerPickup.js";
+import { SoundController } from "./game/SoundController.js";
+
+const canvas = document.querySelector("#game-canvas");
+const statusElement = document.querySelector("#status");
+const introScreen = document.querySelector("#intro-screen");
+const restartButton = document.querySelector("#restart-button");
+const pauseButton = document.querySelector("#pause-button");
+const soundButton = document.querySelector("#sound-button");
+const touchControlButtons = document.querySelectorAll("[data-direction]");
+
+const maze = new Maze();
+const input = new InputController(canvas, touchControlButtons);
+const background = new Background("./SQUARE.png");
+const sound = new SoundController();
+const player = new Player({ column: 7, row: 13, spriteUrl: "./ACAB_MAN.png" });
+const powerPickups = [
+  new PowerPickup({ column: 1, row: 1, spriteUrl: "./COCKTAIL.png" }),
+  new PowerPickup({ column: 13, row: 1, spriteUrl: "./COCKTAIL.png" }),
+  new PowerPickup({ column: 1, row: 13, spriteUrl: "./COCKTAIL.png" }),
+  new PowerPickup({ column: 13, row: 13, spriteUrl: "./COCKTAIL.png" }),
+];
+const enemies = [
+  new Enemy({ column: 5, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "chase" }),
+  new Enemy({ column: 6, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "intercept" }),
+  new Enemy({
+    column: 8,
+    row: 7,
+    spriteUrl: "./PIGLETS.png",
+    behaviour: "patrol",
+    patrolPoints: [
+      { column: 5, row: 7 },
+      { column: 9, row: 7 },
+    ],
+  }),
+  new Enemy({ column: 9, row: 7, spriteUrl: "./PIGLETS.png", behaviour: "chase" }),
+];
+const game = new Game(canvas, statusElement, maze, input, player, enemies, updateRoundControls, background, powerPickups, sound);
+
+statusElement.textContent = "Escape the patrol — use arrow keys, WASD, or swipe.";
+
+restartButton.addEventListener("click", () => {
+  if (game.isLevelComplete) game.advanceLevel();
+  else game.restart();
+});
+pauseButton.addEventListener("click", () => game.togglePause());
+soundButton.addEventListener("click", () => {
+  const isMuted = sound.toggleMute();
+  soundButton.textContent = isMuted ? "Sound off" : "Sound on";
+  if (!isMuted) sound.unlock();
+});
+window.addEventListener("pointerdown", () => sound.unlock());
+window.addEventListener("keydown", () => sound.unlock());
+
+introScreen.addEventListener("pointerdown", () => {
+  void startGame();
+}, { once: true });
+introScreen.addEventListener("keydown", handleIntroKey);
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {
+      // The game remains playable when service workers are unavailable.
+    });
+  });
+}
+
+let hasStarted = false;
+
+async function startGame() {
+  if (hasStarted) return;
+  hasStarted = true;
+  introScreen.removeEventListener("keydown", handleIntroKey);
+  await sound.unlock();
+  sound.playIntro();
+  introScreen.classList.add("is-fading-out");
+
+  window.setTimeout(() => {
+    introScreen.hidden = true;
+    game.start();
+  }, 450);
+}
+
+function handleIntroKey(event) {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  event.preventDefault();
+  void startGame();
+}
+
+function updateRoundControls({ state, score, level }) {
+  const isRoundOver = state === "won" || state === "lost";
+  restartButton.hidden = !isRoundOver;
+  pauseButton.disabled = isRoundOver;
+  pauseButton.textContent = state === "paused" ? "Resume" : "Pause";
+  if (isRoundOver) {
+    restartButton.textContent = state === "won" ? `Level ${level + 1} — score ${score}` : "Restart from Level 1";
+  }
+}

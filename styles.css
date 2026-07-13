@@ -1,0 +1,157 @@
+:root {
+  color-scheme: dark;
+  background: #111827;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: grid;
+  min-height: 100dvh;
+  margin: 0;
+  place-items: center;
+}
+
+.intro-screen {
+  background: #171717;
+  cursor: pointer;
+  display: grid;
+  inset: 0;
+  opacity: 1;
+  place-items: center;
+  position: fixed;
+  touch-action: manipulation;
+  z-index: 10;
+}
+
+.intro-screen img {
+  animation: intro-fade-in 0.85s ease-out forwards;
+  height: 100dvh;
+  max-width: 100%;
+  object-fit: contain;
+  opacity: 0;
+  width: 100%;
+}
+
+.intro-screen p {
+  animation: intro-fade-in 0.45s 0.45s ease-out forwards;
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  color: #f8fafc;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0;
+  opacity: 0;
+  position: absolute;
+  text-transform: uppercase;
+}
+
+.intro-screen:focus-visible {
+  outline: 3px solid #fff2b5;
+  outline-offset: -6px;
+}
+
+.intro-screen.is-fading-out {
+  animation: intro-fade-out 0.45s ease-in forwards;
+  pointer-events: none;
+}
+
+.game-shell {
+  display: grid;
+  gap: 0.75rem;
+  justify-items: center;
+  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
+  width: min(100%, 32rem);
+}
+
+#game-canvas {
+  background: #172033;
+  border: 2px solid #4f7cff;
+  border-radius: 0.75rem;
+  display: block;
+  max-height: 68dvh;
+  max-width: 100%;
+  touch-action: none;
+}
+
+.status {
+  color: #dbeafe;
+  font-size: 0.875rem;
+  margin: 0;
+  text-align: center;
+}
+
+.restart-button,
+.pause-button,
+.sound-button {
+  background: #fff2b5;
+  border: 0;
+  border-radius: 0.6rem;
+  color: #172033;
+  cursor: pointer;
+  font: 700 1rem/1 system-ui, sans-serif;
+  min-height: 2.75rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.restart-button:focus-visible,
+.pause-button:focus-visible,
+.sound-button:focus-visible {
+  outline: 3px solid #4f7cff;
+  outline-offset: 3px;
+}
+
+.pause-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.touch-controls {
+  display: grid;
+  gap: 0.35rem;
+  grid-template-areas:
+    ". up ."
+    "left down right";
+  grid-template-columns: repeat(3, 3.5rem);
+  touch-action: manipulation;
+}
+
+.touch-control {
+  align-items: center;
+  background: #23345e;
+  border: 1px solid #4f7cff;
+  border-radius: 0.65rem;
+  color: #eff6ff;
+  cursor: pointer;
+  display: flex;
+  font-size: 1.25rem;
+  justify-content: center;
+  min-height: 3.5rem;
+  padding: 0;
+}
+
+.touch-control:active {
+  background: #4f7cff;
+  transform: scale(0.96);
+}
+
+.touch-control:focus-visible {
+  outline: 3px solid #fff2b5;
+  outline-offset: 2px;
+}
+
+.control-up { grid-area: up; }
+.control-left { grid-area: left; }
+.control-down { grid-area: down; }
+.control-right { grid-area: right; }
+
+@keyframes intro-fade-in {
+  to { opacity: 1; }
+}
+
+@keyframes intro-fade-out {
+  to { opacity: 0; }
+}
