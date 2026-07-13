@@ -1,10 +1,10 @@
-import { Game } from "./game/Game.js?v=21";
+import { Game } from "./game/Game.js?v=23";
 import { Background } from "./game/Background.js";
-import { Enemy } from "./game/Enemy.js";
+import { Enemy } from "./game/Enemy.js?v=23";
 import { InputController } from "./game/InputController.js?v=22";
 import { HapticsController } from "./game/HapticsController.js?v=19";
 import { Maze } from "./game/Maze.js";
-import { Player } from "./game/Player.js";
+import { Player } from "./game/Player.js?v=23";
 import { PowerPickup } from "./game/PowerPickup.js";
 import { SoundController } from "./game/SoundController.js?v=16";
 

@@ -157,9 +157,9 @@ export class Game {
     if (direction) this.statusElement.textContent = `Moving ${direction} - swipe on the game screen or use arrow keys/WASD.`;
     const previousColumn = this.player.column;
     const previousRow = this.player.row;
-    this.player.update(elapsedSeconds, this.maze, direction);
+    const playerArrivedAtTile = this.player.update(elapsedSeconds, this.maze, direction);
 
-    if (this.player.column !== previousColumn || this.player.row !== previousRow) {
+    if (playerArrivedAtTile) {
       this.collectPelletAtPlayer();
       this.collectPowerPickupAtPlayer();
     }

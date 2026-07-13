@@ -1,3 +1,5 @@
+import { getSmoothTileCenter } from "./SmoothMovement.js?v=23";
+
 // 0.264 seconds is nine percent slower than the previous 0.24-second pace.
 const MOVE_INTERVAL_SECONDS = 0.264;
 const POWER_DURATION_SECONDS = 7;
@@ -9,32 +11,32 @@ const DIRECTION_OFFSETS = {
 };
 const OPPOSITE_DIRECTIONS = { up: "down", down: "up", left: "right", right: "left" };
 
-/** A maze enemy with a lightweight, deterministic pursuit/patrol behaviour. */
+/** A maze enemy with smooth movement and deterministic pursuit/patrol behaviour. */
 export class Enemy {
   constructor({ column, row, spriteUrl, behaviour, patrolPoints = [], tintColor = null }) {
     this.spawnColumn = column;
     this.spawnRow = row;
-    this.column = column;
-    this.row = row;
     this.behaviour = behaviour;
     this.patrolPoints = patrolPoints;
     this.tintColor = tintColor;
-    this.patrolPointIndex = 0;
-    this.direction = null;
-    this.moveElapsed = 0;
-    this.vulnerableTimeRemaining = 0;
     this.vulnerableSprite = null;
     this.tintedSprite = null;
     this.speedMultiplier = 1;
     this.sprite = new Image();
     this.sprite.src = spriteUrl;
+    this.reset();
   }
 
   reset() {
     this.column = this.spawnColumn;
     this.row = this.spawnRow;
+    this.fromColumn = this.column;
+    this.fromRow = this.row;
+    this.targetColumn = this.column;
+    this.targetRow = this.row;
     this.direction = null;
     this.moveElapsed = 0;
+    this.isMoving = false;
     this.patrolPointIndex = 0;
     this.vulnerableTimeRemaining = 0;
   }
@@ -53,17 +55,37 @@ export class Enemy {
 
   update(elapsedSeconds, maze, player) {
     this.vulnerableTimeRemaining = Math.max(0, this.vulnerableTimeRemaining - elapsedSeconds);
-    this.moveElapsed += elapsedSeconds;
 
     const moveInterval = MOVE_INTERVAL_SECONDS / this.speedMultiplier;
-    while (this.moveElapsed >= moveInterval) {
-      this.moveElapsed -= moveInterval;
-      this.direction = this.chooseDirection(maze, player);
-      if (!this.direction) continue;
+    let timeRemaining = elapsedSeconds;
 
-      const nextPosition = maze.getNextPosition(this.column, this.row, this.direction);
-      this.column = nextPosition.column;
-      this.row = nextPosition.row;
+    while (timeRemaining > 0) {
+      if (!this.isMoving) {
+        this.moveElapsed = 0;
+        this.direction = this.chooseDirection(maze, player);
+        if (!this.direction) break;
+
+        const nextPosition = maze.getNextPosition(this.column, this.row, this.direction);
+        if (!nextPosition) break;
+
+        this.fromColumn = this.column;
+        this.fromRow = this.row;
+        this.targetColumn = nextPosition.column;
+        this.targetRow = nextPosition.row;
+        this.isMoving = true;
+      }
+
+      const timeToNextTile = moveInterval - this.moveElapsed;
+      const step = Math.min(timeRemaining, timeToNextTile);
+      this.moveElapsed += step;
+      timeRemaining -= step;
+
+      if (this.moveElapsed + Number.EPSILON < moveInterval) break;
+
+      this.column = this.targetColumn;
+      this.row = this.targetRow;
+      this.moveElapsed = 0;
+      this.isMoving = false;
       this.advancePatrolPoint();
     }
   }
@@ -114,8 +136,12 @@ export class Enemy {
     return Math.abs(nextPosition.column - target.column) + Math.abs(nextPosition.row - target.row);
   }
 
+  getRenderCenter(maze) {
+    return getSmoothTileCenter(maze, this, MOVE_INTERVAL_SECONDS / this.speedMultiplier);
+  }
+
   draw(context, maze) {
-    const center = maze.getTileCenter(this.column, this.row);
+    const center = this.getRenderCenter(maze);
     if (!center || !maze.bounds) return;
 
     const width = maze.bounds.tileWidth * 0.92;
