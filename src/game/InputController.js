@@ -39,7 +39,8 @@ export class InputController {
       a: "left",
       d: "right",
     };
-    const direction = keyDirections[event.key];
+    const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    const direction = keyDirections[key];
     if (!direction) return;
 
     event.preventDefault();
