@@ -1,4 +1,5 @@
 const RESPAWN_DELAY_SECONDS = 1.25;
+const PLAYFIELD_ASPECT_RATIO = 9 / 16;
 
 /**
  * The central game loop. Future scenes can use this class without coupling
@@ -95,9 +96,9 @@ export class Game {
   resize() {
     // Keep a consistent portrait playfield while letting CSS fit it on phones.
     const maximumWidth = Math.min(window.innerWidth - 32, 480);
-    const maximumHeight = Math.min(window.innerHeight * 0.68, 720);
-    const width = Math.floor(Math.min(maximumWidth, maximumHeight * (2 / 3)));
-    const height = Math.floor(width * 1.5);
+    const maximumHeight = Math.min(window.innerHeight * 0.75, 720);
+    const width = Math.floor(Math.min(maximumWidth, maximumHeight * PLAYFIELD_ASPECT_RATIO));
+    const height = Math.floor(width / PLAYFIELD_ASPECT_RATIO);
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
 
     this.canvas.width = Math.floor(width * pixelRatio);
@@ -129,7 +130,7 @@ export class Game {
     }
 
     const direction = this.input.consumeDirection();
-    if (direction) this.statusElement.textContent = `Moving ${direction} - swipe or use arrow keys/WASD.`;
+    if (direction) this.statusElement.textContent = `Moving ${direction} - swipe on the game screen or use arrow keys/WASD.`;
     const previousColumn = this.player.column;
     const previousRow = this.player.row;
     this.player.update(elapsedSeconds, this.maze, direction);

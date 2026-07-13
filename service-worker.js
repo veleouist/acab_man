@@ -1,4 +1,4 @@
-const CACHE_NAME = "acab-man-v3";
+const CACHE_NAME = "acab-man-v4";
 const APP_SHELL = [
   "./",
   "./index.html",

@@ -8,7 +8,7 @@ const MAZE_LAYOUT = [
   "#.#.##.#.##.#.#",
   "#.....#.#.....#",
   "###.#.#.#.#.###",
-  "#...#     #...#",
+  " ...#     #... ",
   "#.### ### ###.#",
   "#.....#.#.....#",
   "#.###.#.#.###.#",
@@ -42,9 +42,27 @@ export class Maze {
   }
 
   canMove(column, row, direction) {
+    const nextPosition = this.getNextPosition(column, row, direction);
+    return Boolean(nextPosition && !this.isWall(nextPosition.column, nextPosition.row));
+  }
+
+  getNextPosition(column, row, direction) {
     const offset = DIRECTION_OFFSETS[direction];
-    if (!offset) return false;
-    return !this.isWall(column + offset.column, row + offset.row);
+    if (!offset) return null;
+
+    let nextColumn = column + offset.column;
+    const nextRow = row + offset.row;
+    if (nextColumn < 0 || nextColumn >= this.columns) {
+      if (!this.isTunnelRow(row) || direction === "up" || direction === "down") return null;
+      nextColumn = nextColumn < 0 ? this.columns - 1 : 0;
+    }
+
+    if (nextRow < 0 || nextRow >= this.rowCount) return null;
+    return { column: nextColumn, row: nextRow };
+  }
+
+  isTunnelRow(row) {
+    return this.rows[row]?.[0] !== "#" && this.rows[row]?.[this.columns - 1] !== "#";
   }
 
   isWall(column, row) {

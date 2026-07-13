@@ -42,7 +42,7 @@ export class Player {
         continue;
       }
 
-      const nextPosition = this.getNextPosition(this.direction);
+      const nextPosition = maze.getNextPosition(this.column, this.row, this.direction);
       this.column = nextPosition.column;
       this.row = nextPosition.row;
     }
@@ -66,16 +66,5 @@ export class Player {
     context.beginPath();
     context.arc(center.x, center.y, size / 2, 0, Math.PI * 2);
     context.fill();
-  }
-
-  getNextPosition(direction) {
-    const offsets = {
-      up: { column: 0, row: -1 },
-      down: { column: 0, row: 1 },
-      left: { column: -1, row: 0 },
-      right: { column: 1, row: 0 },
-    };
-    const offset = offsets[direction];
-    return { column: this.column + offset.column, row: this.row + offset.row };
   }
 }

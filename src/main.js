@@ -13,10 +13,9 @@ const introScreen = document.querySelector("#intro-screen");
 const restartButton = document.querySelector("#restart-button");
 const pauseButton = document.querySelector("#pause-button");
 const soundButton = document.querySelector("#sound-button");
-const touchControlButtons = document.querySelectorAll("[data-direction]");
 
 const maze = new Maze();
-const input = new InputController(canvas, touchControlButtons);
+const input = new InputController(canvas);
 const background = new Background("./SQUARE.png");
 const sound = new SoundController();
 const player = new Player({ column: 7, row: 13, spriteUrl: "./ACAB_MAN.png" });
@@ -43,7 +42,7 @@ const enemies = [
 ];
 const game = new Game(canvas, statusElement, maze, input, player, enemies, updateRoundControls, background, powerPickups, sound);
 
-statusElement.textContent = "Escape the patrol — use arrow keys, WASD, or swipe.";
+statusElement.textContent = "Escape the patrol — swipe on the game screen to move.";
 
 restartButton.addEventListener("click", () => {
   if (game.isLevelComplete) game.advanceLevel();

@@ -2,7 +2,7 @@ const SWIPE_DISTANCE = 28;
 
 /** Collects intent without coupling keyboard or touch events to game entities. */
 export class InputController {
-  constructor(canvas, controlButtons = []) {
+  constructor(canvas) {
     this.latestDirection = null;
     this.startPoint = null;
 
@@ -11,10 +11,6 @@ export class InputController {
     canvas.addEventListener("pointerup", (event) => this.handlePointerUp(event));
     canvas.addEventListener("pointercancel", () => {
       this.startPoint = null;
-    });
-    controlButtons.forEach((button) => {
-      button.addEventListener("pointerdown", (event) => this.handleControlPress(event, button.dataset.direction));
-      button.addEventListener("click", (event) => this.handleControlPress(event, button.dataset.direction));
     });
   }
 
@@ -60,11 +56,5 @@ export class InputController {
     } else {
       this.latestDirection = vertical > 0 ? "down" : "up";
     }
-  }
-
-  handleControlPress(event, direction) {
-    if (!direction) return;
-    event.preventDefault();
-    this.latestDirection = direction;
   }
 }

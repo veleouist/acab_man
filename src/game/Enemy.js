@@ -58,9 +58,9 @@ export class Enemy {
       this.direction = this.chooseDirection(maze, player);
       if (!this.direction) continue;
 
-      const offset = DIRECTION_OFFSETS[this.direction];
-      this.column += offset.column;
-      this.row += offset.row;
+      const nextPosition = maze.getNextPosition(this.column, this.row, this.direction);
+      this.column = nextPosition.column;
+      this.row = nextPosition.row;
       this.advancePatrolPoint();
     }
   }
@@ -78,8 +78,8 @@ export class Enemy {
     const target = this.getTarget(player);
 
     return directions.reduce((bestDirection, direction) => {
-      const bestDistance = this.distanceAfterMove(bestDirection, target);
-      const candidateDistance = this.distanceAfterMove(direction, target);
+      const bestDistance = this.distanceAfterMove(bestDirection, target, maze);
+      const candidateDistance = this.distanceAfterMove(direction, target, maze);
       return candidateDistance < bestDistance ? direction : bestDirection;
     });
   }
@@ -106,9 +106,9 @@ export class Enemy {
     this.patrolPointIndex = (this.patrolPointIndex + 1) % this.patrolPoints.length;
   }
 
-  distanceAfterMove(direction, target) {
-    const offset = DIRECTION_OFFSETS[direction];
-    return Math.abs(this.column + offset.column - target.column) + Math.abs(this.row + offset.row - target.row);
+  distanceAfterMove(direction, target, maze) {
+    const nextPosition = maze.getNextPosition(this.column, this.row, direction);
+    return Math.abs(nextPosition.column - target.column) + Math.abs(nextPosition.row - target.row);
   }
 
   draw(context, maze) {

@@ -72,7 +72,7 @@ body {
   border: 2px solid #4f7cff;
   border-radius: 0.75rem;
   display: block;
-  max-height: 68dvh;
+  max-height: 75dvh;
   max-width: 100%;
   touch-action: none;
 }
@@ -108,45 +108,6 @@ body {
   cursor: not-allowed;
   opacity: 0.45;
 }
-
-.touch-controls {
-  display: grid;
-  gap: 0.35rem;
-  grid-template-areas:
-    ". up ."
-    "left down right";
-  grid-template-columns: repeat(3, 3.5rem);
-  touch-action: manipulation;
-}
-
-.touch-control {
-  align-items: center;
-  background: #23345e;
-  border: 1px solid #4f7cff;
-  border-radius: 0.65rem;
-  color: #eff6ff;
-  cursor: pointer;
-  display: flex;
-  font-size: 1.25rem;
-  justify-content: center;
-  min-height: 3.5rem;
-  padding: 0;
-}
-
-.touch-control:active {
-  background: #4f7cff;
-  transform: scale(0.96);
-}
-
-.touch-control:focus-visible {
-  outline: 3px solid #fff2b5;
-  outline-offset: 2px;
-}
-
-.control-up { grid-area: up; }
-.control-left { grid-area: left; }
-.control-down { grid-area: down; }
-.control-right { grid-area: right; }
 
 @keyframes intro-fade-in {
   to { opacity: 1; }
