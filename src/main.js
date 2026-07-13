@@ -1,7 +1,7 @@
 import { Game } from "./game/Game.js?v=26";
 import { Background } from "./game/Background.js";
 import { Enemy } from "./game/Enemy.js?v=23";
-import { InputController } from "./game/InputController.js?v=22";
+import { InputController } from "./game/InputController.js?v=28";
 import { HapticsController } from "./game/HapticsController.js?v=19";
 import { LeaderboardController } from "./game/LeaderboardController.js?v=25";
 import { Maze } from "./game/Maze.js";

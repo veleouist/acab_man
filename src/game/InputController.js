@@ -1,4 +1,5 @@
-const SWIPE_DISTANCE = 28;
+// Quick mobile turns should register from a small but deliberate finger flick.
+const SWIPE_DISTANCE = 12;
 
 /** Collects intent without coupling keyboard or touch events to game entities. */
 export class InputController {
