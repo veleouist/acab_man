@@ -1,4 +1,5 @@
-const MOVE_INTERVAL_SECONDS = 0.24;
+// 0.264 seconds is nine percent slower than the previous 0.24-second pace.
+const MOVE_INTERVAL_SECONDS = 0.264;
 const POWER_DURATION_SECONDS = 7;
 const DIRECTION_OFFSETS = {
   up: { column: 0, row: -1 },
@@ -115,19 +116,20 @@ export class Enemy {
     const center = maze.getTileCenter(this.column, this.row);
     if (!center || !maze.bounds) return;
 
-    const size = maze.bounds.tileSize * 0.9;
-    const x = center.x - size / 2;
-    const y = center.y - size / 2;
+    const width = maze.bounds.tileWidth * 0.92;
+    const height = maze.bounds.tileHeight * 0.72;
+    const x = center.x - width / 2;
+    const y = center.y - height / 2;
 
     if (this.sprite.complete && this.sprite.naturalWidth > 0) {
       const sprite = this.isVulnerable() ? this.getVulnerableSprite() : this.sprite;
-      context.drawImage(sprite, x, y, size, size);
+      context.drawImage(sprite, x, y, width, height);
       return;
     }
 
     context.fillStyle = this.isVulnerable() ? "#3b82f6" : "#6b7280";
     context.beginPath();
-    context.arc(center.x, center.y, size / 2, 0, Math.PI * 2);
+    context.ellipse(center.x, center.y, width / 2, height / 2, 0, 0, Math.PI * 2);
     context.fill();
   }
 

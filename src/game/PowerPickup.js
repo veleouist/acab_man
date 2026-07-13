@@ -23,18 +23,19 @@ export class PowerPickup {
     const center = maze.getTileCenter(this.column, this.row);
     if (!center || !maze.bounds) return;
 
-    const size = maze.bounds.tileSize * 0.94;
-    const x = center.x - size / 2;
-    const y = center.y - size / 2;
+    const width = maze.bounds.tileWidth * 0.96;
+    const height = maze.bounds.tileHeight * 0.72;
+    const x = center.x - width / 2;
+    const y = center.y - height / 2;
 
     if (this.sprite.complete && this.sprite.naturalWidth > 0) {
-      context.drawImage(this.sprite, x, y, size, size);
+      context.drawImage(this.sprite, x, y, width, height);
       return;
     }
 
     context.fillStyle = "#a3e635";
     context.beginPath();
-    context.arc(center.x, center.y, size * 0.28, 0, Math.PI * 2);
+    context.ellipse(center.x, center.y, width * 0.28, height * 0.28, 0, 0, Math.PI * 2);
     context.fill();
   }
 }

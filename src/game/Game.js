@@ -95,8 +95,8 @@ export class Game {
 
   resize() {
     // Keep a consistent portrait playfield while letting CSS fit it on phones.
-    const maximumWidth = Math.min(window.innerWidth - 32, 480);
-    const maximumHeight = Math.min(window.innerHeight * 0.75, 720);
+    const maximumWidth = Math.min(window.innerWidth - 16, 480);
+    const maximumHeight = Math.min(window.innerHeight * 0.8, 720);
     const width = Math.floor(Math.min(maximumWidth, maximumHeight * PLAYFIELD_ASPECT_RATIO));
     const height = Math.floor(width / PLAYFIELD_ASPECT_RATIO);
     const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);

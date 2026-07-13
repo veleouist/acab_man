@@ -84,39 +84,38 @@ export class Maze {
 
   getTileCenter(column, row) {
     if (!this.bounds) return null;
-    const { x, y, tileSize } = this.bounds;
+    const { x, y, tileWidth, tileHeight } = this.bounds;
     return {
-      x: x + (column + 0.5) * tileSize,
-      y: y + (row + 0.5) * tileSize,
+      x: x + (column + 0.5) * tileWidth,
+      y: y + (row + 0.5) * tileHeight,
     };
   }
 
   draw(context, playArea) {
-    const tileSize = Math.floor(
-      Math.min(playArea.width / this.columns, playArea.height / this.rowCount),
-    );
-    const width = tileSize * this.columns;
-    const height = tileSize * this.rowCount;
-    const x = playArea.x + (playArea.width - width) / 2;
-    const y = playArea.y + (playArea.height - height) / 2;
+    // Portrait cells let the maze fill a phone screen instead of leaving a
+    // large unused strip beneath a square maze.
+    const { x, y, width, height } = playArea;
+    const tileWidth = width / this.columns;
+    const tileHeight = height / this.rowCount;
+    const wallInset = Math.max(1, Math.min(tileWidth, tileHeight) * 0.08);
 
-    this.bounds = { x, y, width, height, tileSize };
+    this.bounds = { x, y, width, height, tileWidth, tileHeight };
 
     for (let row = 0; row < this.rowCount; row += 1) {
       for (let column = 0; column < this.columns; column += 1) {
-        const tileX = x + column * tileSize;
-        const tileY = y + row * tileSize;
+        const tileX = x + column * tileWidth;
+        const tileY = y + row * tileHeight;
         const value = this.rows[row][column];
 
         if (value === "#") {
           context.fillStyle = "#365bd6";
-          context.fillRect(tileX, tileY, tileSize, tileSize);
+          context.fillRect(tileX, tileY, tileWidth, tileHeight);
           context.fillStyle = "#4979ff";
-          context.fillRect(tileX + 2, tileY + 2, tileSize - 4, tileSize - 4);
+          context.fillRect(tileX + wallInset, tileY + wallInset, tileWidth - wallInset * 2, tileHeight - wallInset * 2);
         } else if (value === ".") {
           context.fillStyle = "#fff2b5";
           context.beginPath();
-          context.arc(tileX + tileSize / 2, tileY + tileSize / 2, Math.max(2, tileSize * 0.1), 0, Math.PI * 2);
+          context.arc(tileX + tileWidth / 2, tileY + tileHeight / 2, Math.max(2, Math.min(tileWidth, tileHeight) * 0.12), 0, Math.PI * 2);
           context.fill();
         }
       }

@@ -52,19 +52,20 @@ export class Player {
     const center = maze.getTileCenter(this.column, this.row);
     if (!center || !maze.bounds) return;
 
-    const size = maze.bounds.tileSize * 0.92;
-    const x = center.x - size / 2;
-    const y = center.y - size / 2;
+    const width = maze.bounds.tileWidth * 0.92;
+    const height = maze.bounds.tileHeight * 0.74;
+    const x = center.x - width / 2;
+    const y = center.y - height / 2;
 
     if (this.sprite.complete && this.sprite.naturalWidth > 0) {
-      context.drawImage(this.sprite, x, y, size, size);
+      context.drawImage(this.sprite, x, y, width, height);
       return;
     }
 
     // Visible fallback while the supplied sprite is still loading.
     context.fillStyle = "#111111";
     context.beginPath();
-    context.arc(center.x, center.y, size / 2, 0, Math.PI * 2);
+    context.ellipse(center.x, center.y, width / 2, height / 2, 0, 0, Math.PI * 2);
     context.fill();
   }
 }

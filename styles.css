@@ -55,17 +55,21 @@ body {
 }
 
 .intro-screen.is-fading-out {
-  animation: intro-fade-out 0.45s ease-in forwards;
   pointer-events: none;
 }
 
+.intro-screen.is-fading-out img,
+.intro-screen.is-fading-out p,
+.title-screen.is-fading-out > * {
+  animation: overlay-content-fade-out 0.35s ease-in forwards;
+}
+
 .title-screen {
-  animation: title-fade-in 0.45s ease-out forwards;
   background: #ffffff;
   color: #171717;
   cursor: pointer;
   display: grid;
-  grid-template-rows: auto 1fr auto auto;
+  grid-template-rows: auto 1fr auto;
   inset: 0;
   padding: max(2rem, env(safe-area-inset-top)) 1.5rem max(2rem, env(safe-area-inset-bottom));
   place-items: center;
@@ -84,13 +88,6 @@ body {
   width: 100%;
 }
 
-.title-screen p {
-  align-self: end;
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin: 0 0 0.75rem;
-}
-
 .title-screen strong {
   animation: intro-pulse 1.15s ease-in-out infinite alternate;
   color: #e52f2c;
@@ -105,7 +102,6 @@ body {
 }
 
 .title-screen.is-fading-out {
-  animation: intro-fade-out 0.35s ease-in forwards;
   pointer-events: none;
 }
 
@@ -118,8 +114,8 @@ body {
   display: grid;
   gap: 0.75rem;
   justify-items: center;
-  padding: max(1rem, env(safe-area-inset-top)) 1rem max(1rem, env(safe-area-inset-bottom));
-  width: min(100%, 32rem);
+  padding: max(0.5rem, env(safe-area-inset-top)) 0.5rem max(0.5rem, env(safe-area-inset-bottom));
+  width: min(100%, 34rem);
 }
 
 #game-canvas {
@@ -127,7 +123,7 @@ body {
   border: 2px solid #4f7cff;
   border-radius: 0.75rem;
   display: block;
-  max-height: 75dvh;
+  max-height: 80dvh;
   max-width: 100%;
   touch-action: none;
 }
@@ -168,13 +164,11 @@ body {
   to { opacity: 1; }
 }
 
-@keyframes intro-fade-out {
-  to { opacity: 0; }
-}
-
-@keyframes title-fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+@keyframes overlay-content-fade-out {
+  to {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
 }
 
 @keyframes intro-pulse {
