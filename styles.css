@@ -75,7 +75,7 @@ body {
   color: #171717;
   cursor: pointer;
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr auto 1fr;
   inset: 0;
   isolation: isolate;
   overflow: hidden;
@@ -107,10 +107,11 @@ body {
 }
 
 .title-screen img {
-  align-self: start;
-  margin-top: clamp(1.5rem, 8dvh, 5rem);
-  max-height: 20dvh;
-  max-width: min(100%, 44rem);
+  align-self: center;
+  grid-row: 2;
+  margin: 0;
+  max-height: 28dvh;
+  max-width: min(100%, 50rem);
   object-fit: contain;
   position: relative;
   width: 100%;
@@ -118,9 +119,11 @@ body {
 }
 
 .title-screen strong {
+  align-self: end;
   animation: intro-pulse 1.15s ease-in-out infinite alternate;
   color: #e52f2c;
   font-size: 1rem;
+  grid-row: 3;
   letter-spacing: 0.08em;
   position: relative;
   text-transform: uppercase;

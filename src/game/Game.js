@@ -311,8 +311,8 @@ export class Game {
 
     const titleY = height / 2;
     if (titleLogo?.complete && titleLogo.naturalWidth > 0) {
-      const maximumWidth = Math.min(width * 0.76, 340);
-      const maximumHeight = height * 0.18;
+      const maximumWidth = Math.min(width * 0.92, 420);
+      const maximumHeight = height * 0.27;
       const logoAspectRatio = titleLogo.naturalWidth / titleLogo.naturalHeight;
       const logoWidth = Math.min(maximumWidth, maximumHeight * logoAspectRatio);
       const logoHeight = logoWidth / logoAspectRatio;
