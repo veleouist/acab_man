@@ -18,6 +18,8 @@ export class Game {
     this.background = background;
     this.powerPickups = powerPickups;
     this.sound = sound;
+    this.gameOverLogo = new Image();
+    this.gameOverLogo.src = "./GAME_OVER.png";
     this.score = 0;
     this.lives = 3;
     this.level = 1;
@@ -273,22 +275,39 @@ export class Game {
     this.enemies.forEach((enemy) => enemy.draw(context, this.maze));
 
     if (this.isLevelComplete) this.drawRoundOverlay(`LEVEL ${this.level} CLEARED`, "#fff2b5");
-    if (this.isGameOver) this.drawRoundOverlay("GAME OVER", "#fecaca");
+    if (this.isGameOver) this.drawRoundOverlay("GAME OVER", "#fecaca", `Final score: ${this.score}`, this.gameOverLogo);
     if (this.isPaused) this.drawRoundOverlay("PAUSED", "#dbeafe");
     if (this.respawnTimeRemaining > 0) {
       this.drawRoundOverlay("GET READY", "#fff2b5", `Respawning in ${Math.ceil(this.respawnTimeRemaining)}`);
     }
   }
 
-  drawRoundOverlay(title, color, subtitle = `Final score: ${this.score}`) {
+  drawRoundOverlay(title, color, subtitle = `Final score: ${this.score}`, titleLogo = null) {
     const { context, width, height } = this;
     context.fillStyle = "rgba(8, 15, 28, 0.78)";
     context.fillRect(0, 0, width, height);
+
+    const titleY = height / 2;
+    if (titleLogo?.complete && titleLogo.naturalWidth > 0) {
+      const maximumWidth = Math.min(width * 0.76, 340);
+      const maximumHeight = height * 0.18;
+      const logoAspectRatio = titleLogo.naturalWidth / titleLogo.naturalHeight;
+      const logoWidth = Math.min(maximumWidth, maximumHeight * logoAspectRatio);
+      const logoHeight = logoWidth / logoAspectRatio;
+
+      context.drawImage(titleLogo, width / 2 - logoWidth / 2, titleY - logoHeight / 2, logoWidth, logoHeight);
+      context.fillStyle = color;
+      context.font = "600 16px system-ui, sans-serif";
+      context.textAlign = "center";
+      context.fillText(subtitle, width / 2, titleY + logoHeight / 2 + 30);
+      return;
+    }
+
     context.fillStyle = color;
     context.font = "700 28px system-ui, sans-serif";
     context.textAlign = "center";
-    context.fillText(title, width / 2, height / 2);
+    context.fillText(title, width / 2, titleY);
     context.font = "600 16px system-ui, sans-serif";
-    context.fillText(subtitle, width / 2, height / 2 + 30);
+    context.fillText(subtitle, width / 2, titleY + 30);
   }
 }
