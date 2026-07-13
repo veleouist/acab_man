@@ -42,6 +42,7 @@ export class Game {
     window.addEventListener("resize", this.resize);
     this.resize();
     this.isRunning = true;
+    this.sound?.startGameplayMusic();
     requestAnimationFrame(this.frame);
   }
 
@@ -60,6 +61,7 @@ export class Game {
     this.respawnTimeRemaining = 0;
     this.setLevelDifficulty();
     this.collectPelletAtPlayer();
+    this.sound?.startGameplayMusic();
     this.statusElement.textContent = "New round - escape the patrol.";
     this.notifyRoundStateChange("playing");
   }
@@ -79,6 +81,7 @@ export class Game {
     this.respawnTimeRemaining = 0;
     this.setLevelDifficulty();
     this.collectPelletAtPlayer();
+    this.sound?.startGameplayMusic();
     this.statusElement.textContent = `Level ${this.level} - MAT movement speed increased.`;
     this.notifyRoundStateChange("playing");
     return true;
@@ -88,6 +91,7 @@ export class Game {
     if (this.isLevelComplete || this.isGameOver) return false;
 
     this.isPaused = !this.isPaused;
+    this.sound?.setGameplayMusicPaused(this.isPaused);
     this.statusElement.textContent = this.isPaused ? "Game paused." : "Game resumed.";
     this.notifyRoundStateChange(this.isPaused ? "paused" : "playing");
     return this.isPaused;
@@ -227,6 +231,7 @@ export class Game {
   finishRound(result, message) {
     this.isLevelComplete = result === "won";
     this.isGameOver = result === "lost";
+    this.sound?.stopGameplayMusic();
     if (result === "won") this.sound?.playWin();
     if (result === "lost") this.sound?.playGameOver();
     this.statusElement.textContent = message;

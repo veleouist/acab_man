@@ -5,7 +5,7 @@ import { InputController } from "./game/InputController.js";
 import { Maze } from "./game/Maze.js";
 import { Player } from "./game/Player.js";
 import { PowerPickup } from "./game/PowerPickup.js";
-import { SoundController } from "./game/SoundController.js?v=14";
+import { SoundController } from "./game/SoundController.js?v=16";
 
 const canvas = document.querySelector("#game-canvas");
 const statusElement = document.querySelector("#status");
@@ -53,7 +53,7 @@ restartButton.addEventListener("click", () => {
 pauseButton.addEventListener("click", () => game.togglePause());
 soundButton.addEventListener("click", () => {
   const isMuted = sound.toggleMute();
-  soundButton.textContent = isMuted ? "Sound off" : "Sound on";
+  soundButton.textContent = isMuted ? "Sound: off" : "Sound: on";
   if (!isMuted) sound.unlock();
 });
 window.addEventListener("pointerdown", () => sound.unlock());

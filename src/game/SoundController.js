@@ -1,4 +1,13 @@
 const TITLE_MUSIC_VOLUME = 0.28;
+const GAMEPLAY_STEP_MILLISECONDS = 125;
+// An original off-kilter chiptune hook: playful, fast, and maze-chase friendly.
+const GAMEPLAY_MELODY = [
+  659, null, 784, 1047, 880, null, 784, null,
+  659, 587, null, 523, 659, null, 587, null,
+  784, null, 988, 880, 1047, null, 880, null,
+  784, 659, 587, null, 523, 587, 659, null,
+];
+const GAMEPLAY_BASS = [147, 147, 196, 196, 165, 165, 220, 196];
 
 /** Lightweight synthesized feedback plus title music. */
 export class SoundController {
@@ -10,6 +19,9 @@ export class SoundController {
     this.titleMusic.preload = "auto";
     this.titleMusic.volume = 0;
     this.titleFadeFrame = null;
+    this.gameplayMusicTimer = null;
+    this.gameplayMusicStep = 0;
+    this.isGameplayMusicPaused = false;
   }
 
   async unlock() {
@@ -49,6 +61,28 @@ export class SoundController {
       this.titleMusic.pause();
       this.titleMusic.currentTime = 0;
     });
+  }
+
+  startGameplayMusic() {
+    if (this.gameplayMusicTimer !== null) return;
+
+    this.gameplayMusicStep = 0;
+    this.isGameplayMusicPaused = false;
+    this.playGameplayStep();
+    this.gameplayMusicTimer = window.setInterval(() => this.playGameplayStep(), GAMEPLAY_STEP_MILLISECONDS);
+  }
+
+  setGameplayMusicPaused(isPaused) {
+    this.isGameplayMusicPaused = isPaused;
+  }
+
+  stopGameplayMusic() {
+    if (this.gameplayMusicTimer === null) return;
+
+    window.clearInterval(this.gameplayMusicTimer);
+    this.gameplayMusicTimer = null;
+    this.gameplayMusicStep = 0;
+    this.isGameplayMusicPaused = false;
   }
 
   playPellet() {
@@ -120,5 +154,25 @@ export class SoundController {
     if (this.titleFadeFrame === null) return;
     cancelAnimationFrame(this.titleFadeFrame);
     this.titleFadeFrame = null;
+  }
+
+  playGameplayStep() {
+    if (this.isGameplayMusicPaused) return;
+
+    const step = this.gameplayMusicStep;
+    const melodyNote = GAMEPLAY_MELODY[step];
+    if (melodyNote) {
+      this.playTone({ frequency: melodyNote, duration: 0.09, type: "square", volume: 0.024 });
+    }
+
+    if (step % 4 === 0) {
+      const bassNote = GAMEPLAY_BASS[(step / 4) % GAMEPLAY_BASS.length];
+      this.playTone({ frequency: bassNote, duration: 0.18, type: "triangle", volume: 0.035 });
+      this.playTone({ frequency: 110, endFrequency: 55, duration: 0.065, type: "square", volume: 0.022 });
+    } else if (step % 4 === 2) {
+      this.playTone({ frequency: 1320, endFrequency: 1040, duration: 0.03, type: "square", volume: 0.014 });
+    }
+
+    this.gameplayMusicStep = (step + 1) % GAMEPLAY_MELODY.length;
   }
 }
